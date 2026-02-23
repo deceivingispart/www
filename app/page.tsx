@@ -28,7 +28,7 @@ export default function Home() {
   const [hover, setHover] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [darkMode, setDarkMode] = useState(true);
-  const [language, setLanguage] = useState<"en" | "br">("br");
+  const [language, setLanguage] = useState<"en" | "br">("en");
 
   const t = locales[language]; // puxando todas as strings do idioma atual
 
