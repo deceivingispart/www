@@ -44,8 +44,8 @@ export default function Home() {
 
   useEffect(() => {
     fetchTracks();
-    const interval = setInterval(fetchTracks, 30_000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(fetchTracks, 30_000);
+    // return () => clearInterval(interval);
   }, []);
 
   const lightBg = "bg-zinc-100"; // off-white
