@@ -8,6 +8,7 @@ import {
   FaDiscord,
   FaGithub,
   FaInstagram,
+  FaLastfm,
   FaTelegram,
   FaXTwitter,
 } from "react-icons/fa6";
@@ -28,7 +29,7 @@ export default function Home() {
   const [hover, setHover] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [darkMode, setDarkMode] = useState(true);
-  const [language, setLanguage] = useState<"en" | "br">("br");
+  const [language, setLanguage] = useState<"en" | "br">("en");
 
   const t = locales[language]; // puxando todas as strings do idioma atual
 
@@ -44,8 +45,8 @@ export default function Home() {
 
   useEffect(() => {
     fetchTracks();
-    const interval = setInterval(fetchTracks, 30_000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(fetchTracks, 30_000);
+    // return () => clearInterval(interval);
   }, []);
 
   const lightBg = "bg-zinc-100"; // off-white
@@ -119,12 +120,16 @@ export default function Home() {
             ]}
             secondarySocials={[
               {
-                href: "https://github.com/seuuser",
+                href: "https://github.com/deceivingispart",
                 icon: <FaGithub />,
               },
               {
-                href: "https://twitter.com/seuuser",
+                href: "https://twitter.com/deceivingispart",
                 icon: <FaXTwitter />,
+              },
+              {
+                href: "https://last.fm/z7s",
+                icon: <FaLastfm />,
               },
             ]}
           />
