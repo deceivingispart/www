@@ -11,7 +11,7 @@ export const locales = {
     findMe: "onde me encontrar",
     discord: "basicamente vivo aqui",
     telegram: "verifico com frequência",
-    instagram: "quase não uso esse app.",
+    instagram: "quase não uso esse app",
 
     // Listening history
     nowPlaying: "ouvindo agora",
@@ -33,7 +33,7 @@ export const locales = {
     findMe: "where to find me",
     discord: "i basically live here",
     telegram: "i check messages frequently",
-    instagram: "i rarely open this app.",
+    instagram: "i rarely open this app",
 
     // Listening history
     nowPlaying: "what i'm listening to",

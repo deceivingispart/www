@@ -9,6 +9,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "martins.lat",
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({

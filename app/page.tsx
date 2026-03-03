@@ -29,7 +29,13 @@ export default function Home() {
   const [hover, setHover] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [darkMode, setDarkMode] = useState(true);
+  const lang = navigator.language.endsWith("BR") ? "br" : "en";
   const [language, setLanguage] = useState<"en" | "br">("en");
+
+  useEffect(() => {
+    const lang = navigator.language.endsWith("BR") ? "br" : "en";
+    setLanguage(lang);
+  }, []);
 
   const t = locales[language]; // puxando todas as strings do idioma atual
 
@@ -137,10 +143,10 @@ export default function Home() {
 
         <RecentTracks darkMode={darkMode} t={t} />
 
-        <hr className="my-8 h-px border-none mx-auto w-full bg-zinc-700" />
+        {/* <hr className="my-8 h-px border-none mx-auto w-full bg-zinc-700" />
         <div className="flex items-center justify-center">
           <p className="text-sm text-zinc-500">{t.footerText}</p>
-        </div>
+        </div> */}
       </div>
 
       <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
