@@ -20,22 +20,18 @@ export default function MouseTooltip({
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!visible) return;
-
     const handleMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
-  }, [visible]);
-
-  if (!visible) return null;
+  }, []);
 
   return (
     <div
       className={`fixed z-50 pointer-events-none px-4 py-2 text-sm 
-      rounded-lg border shadow-xl backdrop-blur-sm transition-colors duration-300
+      rounded-lg border shadow-xl backdrop-blur-sm transition-opacity duration-150
       ${
         darkMode
           ? "bg-zinc-800 text-zinc-200 border-zinc-700"
@@ -44,6 +40,7 @@ export default function MouseTooltip({
       style={{
         top: position.y + offsetY,
         left: position.x + offsetX,
+        opacity: visible ? 1 : 0,
       }}
     >
       {children}

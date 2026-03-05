@@ -7,6 +7,9 @@ export const locales = {
     description:
       "eu costumo criar coisas pra mim e pra amigos e mexer com serviços e infraestrutura self-hosted.",
 
+    // Projects
+    projects: "meus projetos",
+
     // Socials
     findMe: "onde me encontrar",
     discord: "basicamente vivo aqui",
@@ -28,6 +31,9 @@ export const locales = {
     age: "18 years old, Brazil",
     description:
       "i usually build things for myself and friends and experiment with self-hosted services and infrastructure.",
+
+    // Projects
+    projects: "my projects",
 
     // Socials
     findMe: "where to find me",

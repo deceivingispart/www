@@ -17,6 +17,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { FaTelegramPlane } from "react-icons/fa";
 import SocialGrid from "./components/socialSection";
 import SocialSection from "./components/socialSection";
+import ProjectsSection from "./components/projectsSection";
 
 type Track = {
   artist: { "#text": string };
@@ -28,6 +29,7 @@ type Track = {
 export default function Home() {
   const [hover, setHover] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [repos, setRepos] = useState<any[]>([]);
   const [darkMode, setDarkMode] = useState(true);
   const lang = navigator.language.endsWith("BR") ? "br" : "en";
   const [language, setLanguage] = useState<"en" | "br">("en");
@@ -49,8 +51,22 @@ export default function Home() {
     }
   };
 
+  const fetchRepos = async () => {
+    try {
+      const res = await fetch(
+        "https://api.github.com/users/deceivingispart/repos",
+      );
+      const data = await res.json();
+      setRepos(data);
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchTracks();
+    fetchRepos();
     // const interval = setInterval(fetchTracks, 30_000);
     // return () => clearInterval(interval);
   }, []);
@@ -101,6 +117,19 @@ export default function Home() {
         <hr className="h-px border-none mx-auto w-full bg-zinc-700" />
 
         <div className="flex flex-col">
+          <ProjectsSection
+            title={t.projects}
+            darkMode={darkMode}
+            mainProjects={repos.map((repo) => ({
+              href: repo.html_url,
+              name: repo.name,
+              description: repo.description,
+              language: repo.language,
+            }))}
+          />
+        </div>
+
+        <div className="flex flex-col">
           <SocialSection
             title={t.findMe}
             darkMode={darkMode}
@@ -142,11 +171,6 @@ export default function Home() {
         </div>
 
         <RecentTracks darkMode={darkMode} t={t} />
-
-        {/* <hr className="my-8 h-px border-none mx-auto w-full bg-zinc-700" />
-        <div className="flex items-center justify-center">
-          <p className="text-sm text-zinc-500">{t.footerText}</p>
-        </div> */}
       </div>
 
       <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
@@ -168,6 +192,7 @@ export default function Home() {
           )}
         </button>
       </div>
+      
 
       <MouseTooltip darkMode={darkMode} visible={hover}>
         <span

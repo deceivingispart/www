@@ -8,7 +8,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "martins.lat",
+  title: "martins",
   icons: "/favicon.ico",
 };
 
