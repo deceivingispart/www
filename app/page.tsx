@@ -1,209 +1,138 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import MouseTooltip from "@/app/components/mouseTooltip";
-import RecentTracks from "@/app/components/recentTracks";
-import { Sun, Moon } from "lucide-react";
-import {
-  FaDiscord,
-  FaGithub,
-  FaInstagram,
-  FaLastfm,
-  FaTelegram,
-  FaXTwitter,
-} from "react-icons/fa6";
-import { locales } from "./lib/locales";
-import { FiExternalLink } from "react-icons/fi";
-import { FaTelegramPlane } from "react-icons/fa";
-import SocialGrid from "./components/socialSection";
-import SocialSection from "./components/socialSection";
-import ProjectsSection from "./components/projectsSection";
-
-type Track = {
-  artist: { "#text": string };
-  name: string;
-  image: { "#text": string }[];
-  "@attr"?: { nowplaying?: string };
-};
+import { useEffect, useState } from "react";
+import SideBar from "@/components/ui/sideBar";
+import Badge from "@/components/ui/badge";
+import { BsDiscord, BsGithub, BsTelegram } from "react-icons/bs";
 
 export default function Home() {
-  const [hover, setHover] = useState(false);
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [repos, setRepos] = useState<any[]>([]);
-  const [darkMode, setDarkMode] = useState(true);
-  const lang = navigator.language.endsWith("BR") ? "br" : "en";
-  const [language, setLanguage] = useState<"en" | "br">("en");
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const lang = navigator.language.endsWith("BR") ? "br" : "en";
-    setLanguage(lang);
+    const t = setTimeout(() => setVisible(true), 80);
+    return () => clearTimeout(t);
   }, []);
-
-  const t = locales[language]; // puxando todas as strings do idioma atual
-
-  const fetchTracks = async () => {
-    try {
-      const res = await fetch("/api/lastfm");
-      const data = await res.json();
-      setTracks(data.recenttracks.track);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchRepos = async () => {
-    try {
-      const res = await fetch(
-        "https://api.github.com/users/deceivingispart/repos",
-      );
-      const data = await res.json();
-      setRepos(data);
-      console.log(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchTracks();
-    fetchRepos();
-    // const interval = setInterval(fetchTracks, 30_000);
-    // return () => clearInterval(interval);
-  }, []);
-
-  const lightBg = "bg-zinc-100"; // off-white
-  const lightText = "text-zinc-900";
-  const darkBg = "bg-zinc-900";
-  const darkText = "text-zinc-100";
-
-  const buttonClass =
-    "p-2 rounded-full cursor-pointer transition-colors duration-200 font-semibold opacity-70 hover:opacity-100";
 
   return (
-    <main
-      className={`min-h-screen px-8 md:px-16 pt-24 transition-colors duration-300 ${
-        darkMode ? `${darkBg} ${darkText}` : `${lightBg} ${lightText}`
-      }`}
-    >
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-6xl md:text-8xl font-semibold leading-[1.05] cursor-default">
-          {t.greeting}{" "}
-          <span
-            className="font-bold text-purple-600"
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-          >
-            martins!
-          </span>
-        </h1>
+    <div className="h-screen flex items-center relative overflow-hidden">
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse at 75% 25%, rgba(140, 60, 255, 0.55) 0%, transparent 55%),
+            radial-gradient(ellipse at 20% 75%, rgba(90, 30, 200, 0.45) 0%, transparent 50%),
+            radial-gradient(ellipse at 55% 5%,  rgba(180, 70, 255, 0.40) 0%, transparent 45%),
+            #04000a
+          `,
+        }}
+      />
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: "rgba(3, 0, 10, 0.52)",
+          backdropFilter: "blur(72px) saturate(0.65)",
+          WebkitBackdropFilter: "blur(72px) saturate(0.65)",
+        }}
+      />
 
-        <div
-          className={`mt-2 text-lg md:text-xl font-medium transition-colors duration-300 ${
-            darkMode ? "text-zinc-400" : "text-zinc-700"
-          }`}
-        >
-          {t.age}
-        </div>
-
-        <div className="mt-4">
-          <p
-            className={`text-sm md:text-base leading-relaxed font-light rounded-lg px-4 py-2 backdrop-blur-sm transition-colors duration-300 ${
-              darkMode ? "text-zinc-200" : "text-zinc-900"
-            }`}
-          >
-            {t.description}
-          </p>
-        </div>
-        <hr className="h-px border-none mx-auto w-full bg-zinc-700" />
-
-        <div className="flex flex-col">
-          <ProjectsSection
-            title={t.projects}
-            darkMode={darkMode}
-            mainProjects={repos.map((repo) => ({
-              href: repo.html_url,
-              name: repo.name,
-              description: repo.description,
-              language: repo.language,
-            }))}
+      <svg
+        className="fixed inset-0 w-full h-full pointer-events-none opacity-[0.025]"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <filter id="noise">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.75"
+            numOctaves="4"
+            stitchTiles="stitch"
           />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" />
+      </svg>
+
+      <SideBar />
+
+      <main
+        className="flex-1 flex flex-col p-6 z-10"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(10px)",
+          transition: "opacity 0.6s ease, transform 0.6s ease",
+        }}
+      >
+        <div className="w-full max-w-2xl mx-auto space-y-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-px w-5 bg-purple-400/50" />
+              <span
+                className="text-[10px] tracking-[0.2em] font-medium"
+                style={{ color: "rgba(200,160,255,0.55)" }}
+              >
+                hey there, i'm
+              </span>
+            </div>
+
+            <h1
+              className="text-4xl font-semibold tracking-tight leading-none"
+              style={{
+                color: "#fff",
+                fontFamily: "'Geist', 'Inter', sans-serif",
+                letterSpacing: "-0.03em",
+              }}
+            >
+              martins
+            </h1>
+          </div>
+
+          <div
+            className="relative rounded-xl p-5"
+            style={{
+              background: "rgba(255,255,255,0.035)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              boxShadow: "0 0 60px -20px rgba(120,50,255,0.25)",
+            }}
+          >
+            <div
+              className="absolute -top-px left-[8%] right-[8%] h-px"
+              style={{
+                background:
+                  "linear-gradient(to right, transparent, rgba(180,120,255,0.35), transparent)",
+              }}
+            />
+
+            <p
+              className="text-sm leading-[1.9] tracking-wide"
+              style={{ color: "rgba(255,255,255,0.52)" }}
+            >
+              i'm a <Hl>fullstack developer</Hl> building things for myself,
+              friends, and anyone who finds them useful. started{" "}
+              <Hl>back-end</Hl> in 2016, went fullstack by 2019. mostly{" "}
+              <Hl>python, typescript</Hl> and <Hl>self-hosted infra</Hl> —
+              learning <Hl>rust</Hl> now.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Badge href="https://discord.com/users/599988978531172352" key="Discord" icon=<BsDiscord />>
+              Discord
+            </Badge>
+            <Badge href="https://github.com/deceivingispart" key="Github" icon=<BsGithub />>
+              Github
+            </Badge>
+            <Badge href="https://t.me/iezusss" key="Telegram" icon=<BsTelegram />>
+              Telegram
+            </Badge>
+          </div>
         </div>
+      </main>
+    </div>
+  );
+}
 
-        <div className="flex flex-col">
-          <SocialSection
-            title={t.findMe}
-            darkMode={darkMode}
-            mainSocials={[
-              {
-                href: "https://discord.com/users/599988978531172352",
-                name: "Discord",
-                description: t.discord,
-                icon: <FaDiscord className="text-purple-400" />,
-              },
-              {
-                href: "https://t.me/iezusss",
-                name: "Telegram",
-                description: t.telegram,
-                icon: <FaTelegramPlane className="text-purple-400" />,
-              },
-              {
-                href: "https://instagram.com/deceivingispart",
-                name: "Instagram",
-                description: t.instagram,
-                icon: <FaInstagram className="text-purple-400" />,
-              },
-            ]}
-            secondarySocials={[
-              {
-                href: "https://github.com/deceivingispart",
-                icon: <FaGithub />,
-              },
-              {
-                href: "https://twitter.com/deceivingispart",
-                icon: <FaXTwitter />,
-              },
-              {
-                href: "https://last.fm/z7s",
-                icon: <FaLastfm />,
-              },
-            ]}
-          />
-        </div>
-
-        <RecentTracks darkMode={darkMode} t={t} />
-      </div>
-
-      <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
-        <button
-          onClick={() => setLanguage(language === "br" ? "en" : "br")}
-          className={`${buttonClass} ${darkMode ? "text-zinc-100" : "text-zinc-900"}`}
-        >
-          {language === "br" ? "BR" : "EN"}
-        </button>
-
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className={`${buttonClass} ${darkMode ? "text-zinc-100" : "text-zinc-900"}`}
-        >
-          {darkMode ? (
-            <Sun className="w-5 h-5 inline" />
-          ) : (
-            <Moon className="w-5 h-5 inline" />
-          )}
-        </button>
-      </div>
-      
-
-      <MouseTooltip darkMode={darkMode} visible={hover}>
-        <span
-          className={`font-bold px-1 rounded-sm ${
-            darkMode ? "bg-zinc-900 text-zinc-100" : "bg-zinc-300 text-zinc-900"
-          }`}
-        >
-          {t.aka}
-        </span>{" "}
-        vz, yeezus
-      </MouseTooltip>
-    </main>
+function Hl({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="font-medium" style={{ color: "rgba(255,255,255,0.88)" }}>
+      {children}
+    </span>
   );
 }
